@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.Domain", "Core\Ta
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{455882F7-DC6B-4364-9518-AFF013826811}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.Persistence", "Infrastructure\TaskBoard.Persistence\TaskBoard.Persistence.csproj", "{F7C4102D-1354-4BEE-897F-FEBABB7D5FFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.Application", "Core\TaskBoard.Application\TaskBoard.Application.csproj", "{A3FCC89F-A43F-4FCE-B36C-F8C9255ADB41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,11 +23,21 @@ Global
 		{7F8E35C0-ED34-4AD7-A18C-931D255AF724}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F8E35C0-ED34-4AD7-A18C-931D255AF724}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F8E35C0-ED34-4AD7-A18C-931D255AF724}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7C4102D-1354-4BEE-897F-FEBABB7D5FFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7C4102D-1354-4BEE-897F-FEBABB7D5FFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7C4102D-1354-4BEE-897F-FEBABB7D5FFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7C4102D-1354-4BEE-897F-FEBABB7D5FFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3FCC89F-A43F-4FCE-B36C-F8C9255ADB41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3FCC89F-A43F-4FCE-B36C-F8C9255ADB41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3FCC89F-A43F-4FCE-B36C-F8C9255ADB41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3FCC89F-A43F-4FCE-B36C-F8C9255ADB41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7F8E35C0-ED34-4AD7-A18C-931D255AF724} = {6602BF88-E129-40C5-A83F-80A1F78359A2}
+		{F7C4102D-1354-4BEE-897F-FEBABB7D5FFD} = {455882F7-DC6B-4364-9518-AFF013826811}
+		{A3FCC89F-A43F-4FCE-B36C-F8C9255ADB41} = {6602BF88-E129-40C5-A83F-80A1F78359A2}
 	EndGlobalSection
 EndGlobal
