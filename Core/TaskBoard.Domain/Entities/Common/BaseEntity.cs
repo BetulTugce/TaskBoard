@@ -6,7 +6,7 @@ namespace TaskBoard.Domain.Entities.Common
     {
         [Required]
         public Guid? Id { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        virtual public DateTime UpdatedAt { get; set; }
     }
 }
