@@ -14,7 +14,7 @@ namespace TaskBoard.Persistence.Contexts
 
         public DbSet<Domain.Entities.Task> Tasks { get; set; }
         public DbSet<Team> Teams { get; set; }
-        public DbSet<TeamMember> TeamMembers { get; set; }
+        //public DbSet<TeamMember> TeamMembers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -45,23 +45,12 @@ namespace TaskBoard.Persistence.Contexts
                 .WithMany(u => u.ManagedTeams) // Bir User birden fazla Teamin Manageri olabilir.
                 .HasForeignKey(t => t.ManagerId) // Team tablosunda ManagerId foreign key olarak tanimli.
                 .OnDelete(DeleteBehavior.Restrict); // Managerin silinmesi engellenir..
-
-            // TeamMember -> Team
-            builder.Entity<Team>()
-                .HasMany(t => t.TeamMembers)
-                .WithOne(tm => tm.Team)
-                .HasForeignKey(tm => tm.TeamId)
-                .OnDelete(DeleteBehavior.Cascade); // Team silindiginde ilgili TeamMemberlar silinir..
             #endregion
 
-            #region TeamMember iliskileri
-
-            // TeamMember -> User
-            builder.Entity<TeamMember>()
-                .HasOne(tm => tm.User)
-                .WithMany(u => u.TeamMembers)
-                .HasForeignKey(tm => tm.UserId)
-                .OnDelete(DeleteBehavior.Cascade); // Kullanici silindiginde ilgili TeamMemberlar da silinir.
+            #region Team ve ApplicationUser (TeamMember) iliskisi
+            builder.Entity<Team>()
+                .HasMany(t => t.Members)
+                .WithMany(u => u.Teams);
             #endregion
         }
 

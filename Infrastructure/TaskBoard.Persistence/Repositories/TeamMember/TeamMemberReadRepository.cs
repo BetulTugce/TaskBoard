@@ -1,39 +1,38 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskBoard.Application.Repositories;
 using TaskBoard.Domain.Entities;
+using TaskBoard.Domain.Entities.Identity;
 using TaskBoard.Persistence.Contexts;
 
 namespace TaskBoard.Persistence.Repositories
 {
-    public class TeamMemberReadRepository : ReadRepository<TeamMember>, ITeamMemberReadRepository
+    public class TeamMemberReadRepository : ITeamMemberReadRepository
     {
         readonly private TaskBoardDbContext _context;
 
-        public TeamMemberReadRepository(TaskBoardDbContext context) : base(context)
+        public TeamMemberReadRepository(TaskBoardDbContext context)
         {
             _context = context;
         }
 
         // Belirli bir teame ait tum userlari getirir..
-        public async Task<IEnumerable<TeamMember>> GetTeamMembersByTeamId(Guid teamId)
+        public async Task<IEnumerable<ApplicationUser>> GetTeamMembersByTeamId(Guid teamId)
         {
             // Team IDsine gore takim uyelerini aliniyor..
-            var teamMembers = await _context.TeamMembers
-                                             .Where(tm => tm.TeamId == teamId)
-                                             .ToListAsync();
+            var team = await _context.Teams.Include(t => t.Members)
+                                             .FirstOrDefaultAsync(t => t.Id == teamId);
 
-            return teamMembers; // Listeyi gonderir..
+            return team?.Members ?? new List<ApplicationUser>(); // Listeyi gonderir..
         }
 
         // Belirli bir usera ait tum teamleri getirir..
-        public async Task<IEnumerable<TeamMember>> GetTeamsByUserId(Guid userId)
+        public async Task<IEnumerable<Team>> GetTeamsByUserId(Guid userId)
         {
             // User IDsine gore teamleri aliyor..
-            var teamMembers = await _context.TeamMembers
-                                             .Where(tm => tm.UserId == userId)
-                                             .ToListAsync();
+            var user = await _context.Users.Include(u => u.Teams)
+                                             .FirstOrDefaultAsync(u => u.Id == userId);
 
-            return teamMembers; // Listeyi gonderir..
+            return user?.Teams ?? new List<Team>(); // Listeyi gonderir..
         }
     }
 }

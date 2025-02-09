@@ -12,11 +12,11 @@ namespace TaskBoard.Domain.Entities.Identity
         // Kullaniciya atanmis gorevler
         public virtual ICollection<Task> Tasks { get; set; }
 
-        // Kullanicinin ait oldugu takimlar
-        public virtual ICollection<TeamMember> TeamMembers { get; set; }
-
         // Kullanicinin yonetici oldugu takimlar
         public virtual ICollection<Team> ManagedTeams { get; set; }
+
+        // Kullanicinin dahil oldugu takimlar (many-to-many ilişki)
+        public virtual ICollection<Team> Teams { get; set; }
 
     }
 }

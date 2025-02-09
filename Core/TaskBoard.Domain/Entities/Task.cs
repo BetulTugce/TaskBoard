@@ -9,7 +9,7 @@ namespace TaskBoard.Domain.Entities
     {
         public required string Title { get; set; }
         public string Description { get; set; } = string.Empty;
-        public Enums.TaskStatus Status { get; set; }
+        public Enums.TaskStatus Status { get; set; } = Enums.TaskStatus.Pending;
         public DateTime Deadline { get; set; } = DateTime.UtcNow.AddDays(1);
         public DateTime? ReminderTime { get; set; }
 

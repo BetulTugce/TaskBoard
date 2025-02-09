@@ -1,10 +1,11 @@
 ﻿using TaskBoard.Domain.Entities;
+using TaskBoard.Domain.Entities.Identity;
 
 namespace TaskBoard.Application.Repositories
 {
-    public interface ITeamMemberReadRepository : IReadRepository<TeamMember>
+    public interface ITeamMemberReadRepository
     {
-        Task<IEnumerable<TeamMember>> GetTeamMembersByTeamId(Guid teamId);
-        Task<IEnumerable<TeamMember>> GetTeamsByUserId(Guid userId);
+        Task<IEnumerable<ApplicationUser>> GetTeamMembersByTeamId(Guid teamId);
+        Task<IEnumerable<Team>> GetTeamsByUserId(Guid userId);
     }
 }
