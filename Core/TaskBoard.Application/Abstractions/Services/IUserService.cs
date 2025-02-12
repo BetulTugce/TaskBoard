@@ -4,6 +4,8 @@ namespace TaskBoard.Application.Abstractions.Services
 {
     public interface IUserService
     {
-        Task<CreateUserResponse> CreateAsync(CreateUserDto user);
+        Task<CreateUserResponseDto> CreateAsync(CreateUserDto user);
+        Task<List<UserResponseDto>> GetAllUsersAsync(int page, int size);
+        int TotalUsersCount { get; }
     }
 }

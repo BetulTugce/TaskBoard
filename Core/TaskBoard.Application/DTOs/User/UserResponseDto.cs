@@ -3,7 +3,7 @@ using TaskBoard.Application.DTOs.Team;
 
 namespace TaskBoard.Application.DTOs.User
 {
-    public class UserDto
+    public class UserResponseDto
     {
         public Guid Id { get; set; }
         public string UserName { get; set; }
@@ -12,6 +12,9 @@ namespace TaskBoard.Application.DTOs.User
         public string Email { get; set; }
         // Kullanicinin gorevleri
         public List<TaskDto> Tasks { get; set; } = new List<TaskDto>();
+
+        // Kullanicinin yonetici oldugu takimlar
+        public List<TeamDto> ManagedTeams { get; set; } = new List<TeamDto>();
 
         // Kullanicinin dahil oldugu takimlar
         public List<TeamDto> Teams { get; set; } = new List<TeamDto>();

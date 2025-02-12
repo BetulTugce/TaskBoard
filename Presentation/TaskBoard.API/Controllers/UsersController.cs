@@ -19,7 +19,7 @@ namespace TaskBoard.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDto request)
         {
-            CreateUserResponse response = await _userService.CreateAsync(request);
+            CreateUserResponseDto response = await _userService.CreateAsync(request);
             if (response.Succeeded)
             {
                 return StatusCode((int)HttpStatusCode.Created, response);
@@ -28,6 +28,18 @@ namespace TaskBoard.API.Controllers
             {
                 return BadRequest(response);
             }
+        }
+
+        [HttpGet]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersDto request)
+        {
+            GetAllUsersResponseDto response = new GetAllUsersResponseDto
+            {
+                Users = await _userService.GetAllUsersAsync(request.Page, request.Size),
+                TotalUsersCount = _userService.TotalUsersCount
+            };
+            return Ok(response);
         }
     }
 }

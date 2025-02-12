@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TaskBoard.Application.Abstractions.Services;
+using TaskBoard.Application.DTOs.Task;
 using TaskBoard.Application.DTOs.User;
 using TaskBoard.Domain.Entities.Identity;
 
@@ -15,7 +17,7 @@ namespace TaskBoard.Persistence.Services
         }
 
         // Yeni kullanici olusturur..
-        public async Task<CreateUserResponse> CreateAsync(CreateUserDto user)
+        public async Task<CreateUserResponseDto> CreateAsync(CreateUserDto user)
         {
             IdentityResult result = await _userManager.CreateAsync(new()
             {
@@ -26,7 +28,7 @@ namespace TaskBoard.Persistence.Services
                 LastName = user.LastName,
             }, user.Password);
 
-            CreateUserResponse response = new() { Succeeded = result.Succeeded };
+            CreateUserResponseDto response = new() { Succeeded = result.Succeeded };
 
             if (result.Succeeded)
                 response.Message = "Kullanıcı başarıyla oluşturulmuştur.";
@@ -36,5 +38,33 @@ namespace TaskBoard.Persistence.Services
 
             return response;
         }
+
+        public async Task<List<UserResponseDto>> GetAllUsersAsync(int page, int size)
+        {
+            var users = await _userManager.Users.OrderBy(i => i.UserName).Include(u => u.Tasks)
+                  .Skip((page - 1) * size)
+                  .Take(size)
+                  .ToListAsync();
+            return users.Select(user => new UserResponseDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                UserName = user.UserName,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt,
+                Tasks = user.Tasks.Select(task => new TaskDto
+                {
+                    Id = task.Id,
+                    Title = task.Title,
+                    Description = task.Description,
+                    Status = task.Status,
+                    CreatedAt = task.CreatedAt,
+                }).ToList(),
+            }).ToList();
+        }
+
+        public int TotalUsersCount => _userManager.Users.Count();
     }
 }

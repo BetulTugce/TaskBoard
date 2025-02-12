@@ -9,7 +9,7 @@ namespace TaskBoard.Application.DTOs.Role
         public string Description { get; set; }
 
         // Roleun atandigi kullanicilar
-        public List<UserDto> Users { get; set; } = new List<UserDto>();
+        public List<UserResponseDto> Users { get; set; } = new List<UserResponseDto>();
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

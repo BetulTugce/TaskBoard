@@ -12,7 +12,7 @@ namespace TaskBoard.Application.DTOs.Team
         //public string ManagerName { get; set; }
 
         // Takim uyeleri
-        public List<UserDto> Members { get; set; } = new();
+        public List<UserResponseDto> Members { get; set; } = new();
         public List<TaskDto> Tasks { get; set; } = new();
 
         public DateTime CreatedAt { get; set; }
