@@ -17,16 +17,16 @@ namespace TaskBoard.Persistence.Services
         }
 
         // Yeni kullanici olusturur..
-        public async Task<CreateUserResponseDto> CreateAsync(CreateUserDto user)
+        public async Task<CreateUserResponseDto> CreateAsync(CreateUserRequestDto userDto)
         {
             IdentityResult result = await _userManager.CreateAsync(new()
             {
                 Id = Guid.NewGuid(),
-                UserName = user.UserName,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-            }, user.Password);
+                UserName = userDto.UserName,
+                Email = userDto.Email,
+                FirstName = userDto.FirstName,
+                LastName = userDto.LastName,
+            }, userDto.Password);
 
             CreateUserResponseDto response = new() { Succeeded = result.Succeeded };
 
@@ -54,7 +54,7 @@ namespace TaskBoard.Persistence.Services
                 UserName = user.UserName,
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt,
-                Tasks = user.Tasks.Select(task => new TaskDto
+                Tasks = user.Tasks.Select(task => new TaskResponseDto
                 {
                     Id = task.Id,
                     Title = task.Title,

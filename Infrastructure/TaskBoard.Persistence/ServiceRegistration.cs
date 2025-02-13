@@ -26,6 +26,7 @@ namespace TaskBoard.Persistence
             services.AddScoped<ITeamWriteRepository, TeamWriteRepository>();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITaskService, TaskService>();
         }
     }
 }

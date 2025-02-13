@@ -17,7 +17,7 @@ namespace TaskBoard.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserDto request)
+        public async Task<IActionResult> CreateUser(CreateUserRequestDto request)
         {
             CreateUserResponseDto response = await _userService.CreateAsync(request);
             if (response.Succeeded)
@@ -32,7 +32,7 @@ namespace TaskBoard.API.Controllers
 
         [HttpGet]
         //[Authorize(AuthenticationSchemes = "Admin")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersDto request)
+        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersRequestDto request)
         {
             GetAllUsersResponseDto response = new GetAllUsersResponseDto
             {

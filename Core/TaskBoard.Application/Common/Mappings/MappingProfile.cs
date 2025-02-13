@@ -7,7 +7,7 @@ namespace TaskBoard.Application.Common.Mappings
     {
         public MappingProfile() 
         {
-            CreateMap<Domain.Entities.Task, CreateTaskDto>().ReverseMap();
+            CreateMap<Domain.Entities.Task, CreateTaskRequestDto>().ReverseMap();
         }
     }
 }
