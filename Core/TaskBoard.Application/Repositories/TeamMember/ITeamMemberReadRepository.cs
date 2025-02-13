@@ -5,7 +5,7 @@ namespace TaskBoard.Application.Repositories
 {
     public interface ITeamMemberReadRepository
     {
-        Task<IEnumerable<ApplicationUser>> GetTeamMembersByTeamId(Guid teamId);
-        Task<IEnumerable<Team>> GetTeamsByUserId(Guid userId);
+        Task<IEnumerable<ApplicationUser>> GetTeamMembersByTeamIdAsync(Guid teamId);
+        Task<IEnumerable<Team>> GetTeamsByUserIdAsync(Guid userId);
     }
 }

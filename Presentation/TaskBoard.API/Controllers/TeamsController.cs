@@ -22,5 +22,16 @@ namespace TaskBoard.API.Controllers
             await _teamService.CreateAsync(request);
             return StatusCode((int)HttpStatusCode.Created);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllTeams([FromQuery] GetAllTeamsRequestDto request)
+        {
+            GetAllTeamsResponseDto response = new GetAllTeamsResponseDto
+            {
+                Teams = await _teamService.GetTeamsByUserIdAsync(request),
+                TotalTeamsCount = await _teamService.GetTotalCountByUserIdAsync(request.UserId)
+            };
+            return Ok(response);
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace TaskBoard.Persistence.Repositories
 {
     public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
     {
-        private readonly TaskBoardDbContext _context;
+        protected readonly TaskBoardDbContext _context;
 
         public ReadRepository(TaskBoardDbContext context)
         {

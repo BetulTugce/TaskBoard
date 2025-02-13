@@ -18,6 +18,7 @@ namespace TaskBoard.Persistence.Services
             _mapper = mapper;
         }
 
+        // Yeni bir gorev olusturur..
         public async Task CreateAsync(CreateTaskRequestDto taskDto)
         {
             var newTask = _mapper.Map<Domain.Entities.Task>(taskDto);

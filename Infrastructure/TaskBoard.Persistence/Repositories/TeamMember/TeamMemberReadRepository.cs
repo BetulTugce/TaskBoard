@@ -16,7 +16,7 @@ namespace TaskBoard.Persistence.Repositories
         }
 
         // Belirli bir teame ait tum userlari getirir..
-        public async Task<IEnumerable<ApplicationUser>> GetTeamMembersByTeamId(Guid teamId)
+        public async Task<IEnumerable<ApplicationUser>> GetTeamMembersByTeamIdAsync(Guid teamId)
         {
             // Team IDsine gore takim uyelerini aliniyor..
             var team = await _context.Teams.Include(t => t.Members)
@@ -26,7 +26,7 @@ namespace TaskBoard.Persistence.Repositories
         }
 
         // Belirli bir usera ait tum teamleri getirir..
-        public async Task<IEnumerable<Team>> GetTeamsByUserId(Guid userId)
+        public async Task<IEnumerable<Team>> GetTeamsByUserIdAsync(Guid userId)
         {
             // User IDsine gore teamleri aliyor..
             var user = await _context.Users.Include(u => u.Teams)

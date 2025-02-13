@@ -39,6 +39,7 @@ namespace TaskBoard.Persistence.Services
             return response;
         }
 
+        // Sistemdeki tum kullanicilari listeler..
         public async Task<List<UserResponseDto>> GetAllUsersAsync(int page, int size)
         {
             var users = await _userManager.Users.OrderBy(i => i.UserName).Include(u => u.Tasks)
