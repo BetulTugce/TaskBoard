@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\TaskBoard.Application\TaskBoard.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\TaskBoard.Infrastructure\TaskBoard.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\TaskBoard.Persistence\TaskBoard.Persistence.csproj" />
   </ItemGroup>
 
