@@ -13,6 +13,6 @@
         public Guid? AssignedToId { get; set; }
 
         // Gorevin ait oldugu takim
-        public Guid TeamId { get; set; }
+        public required Guid TeamId { get; set; }
     }
 }

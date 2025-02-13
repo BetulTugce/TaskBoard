@@ -27,6 +27,7 @@ namespace TaskBoard.Persistence
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<ITeamService, TeamService>();
         }
     }
 }

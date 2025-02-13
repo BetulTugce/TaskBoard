@@ -4,6 +4,6 @@
     public class CreateTeamRequestDto
     {
         public required string Name { get; set; }
-        public Guid? ManagerId { get; set; }
+        public required Guid ManagerId { get; set; }
     }
 }
