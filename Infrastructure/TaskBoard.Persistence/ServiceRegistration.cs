@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TaskBoard.Application.Abstractions.Services;
+using TaskBoard.Application.Abstractions.Services.Authentications;
 using TaskBoard.Application.Repositories;
 using TaskBoard.Persistence.Contexts;
 using TaskBoard.Persistence.Repositories;
@@ -25,6 +26,9 @@ namespace TaskBoard.Persistence
             services.AddScoped<ITeamReadRepository, TeamReadRepository>();
             services.AddScoped<ITeamWriteRepository, TeamWriteRepository>();
 
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IInternalAuthentication, AuthService>();
+            services.AddScoped<IExternalAuthentication, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<ITeamService, TeamService>();
