@@ -20,6 +20,6 @@ namespace TaskBoard.Application.DTOs.User
         public List<TeamDto> Teams { get; set; } = new List<TeamDto>();
 
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

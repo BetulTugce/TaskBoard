@@ -6,6 +6,6 @@ namespace TaskBoard.Domain.Entities.Identity
     {
         public string Description { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        virtual public DateTime UpdatedAt { get; set; }
+        virtual public DateTime? UpdatedAt { get; set; }
     }
 }
