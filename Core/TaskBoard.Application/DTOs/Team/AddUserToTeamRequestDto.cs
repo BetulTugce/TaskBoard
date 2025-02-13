@@ -1,6 +1,6 @@
 ﻿namespace TaskBoard.Application.DTOs.Team
 {
-    public class AddUserToTeamDto
+    public class AddUserToTeamRequestDto
     {
         public Guid UserId { get; set; }
         public Guid TeamId { get; set; }

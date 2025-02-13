@@ -11,13 +11,13 @@ namespace TaskBoard.Application.DTOs.User
         public string LastName { get; set; }
         public string Email { get; set; }
         // Kullanicinin gorevleri
-        public List<TaskDto> Tasks { get; set; } = new List<TaskDto>();
+        public List<TaskResponseDto> Tasks { get; set; } = new List<TaskResponseDto>();
 
         // Kullanicinin yonetici oldugu takimlar
-        public List<TeamDto> ManagedTeams { get; set; } = new List<TeamDto>();
+        public List<TeamResponseDto> ManagedTeams { get; set; } = new List<TeamResponseDto>();
 
         // Kullanicinin dahil oldugu takimlar
-        public List<TeamDto> Teams { get; set; } = new List<TeamDto>();
+        public List<TeamResponseDto> Teams { get; set; } = new List<TeamResponseDto>();
 
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }

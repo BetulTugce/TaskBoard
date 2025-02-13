@@ -1,6 +1,6 @@
 ﻿namespace TaskBoard.Application.DTOs.User
 {
-    public class UpdateUserDto
+    public class UpdateUserRequestDto
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

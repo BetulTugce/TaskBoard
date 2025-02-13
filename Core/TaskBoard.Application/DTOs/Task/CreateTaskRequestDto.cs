@@ -1,7 +1,7 @@
 ﻿namespace TaskBoard.Application.DTOs.Task
 {
     // Yeni gorev olusturmak icin kullanilacak DTO
-    public class CreateTaskDto
+    public class CreateTaskRequestDto
     {
         public string Title { get; set; }
         public string Description { get; set; }

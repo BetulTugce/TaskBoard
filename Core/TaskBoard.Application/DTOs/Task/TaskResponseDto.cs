@@ -1,7 +1,7 @@
 ﻿namespace TaskBoard.Application.DTOs.Task
 {
-    // Mevcut gorevi guncellemek icin kullanilacak DTO
-    public class UpdateTaskDto
+    // Bir gorevi ya da gorevleri listelemek icin kullanilacak DTO 
+    public class TaskResponseDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -10,6 +10,10 @@
         public DateTime Deadline { get; set; }
         public DateTime? ReminderTime { get; set; }
         public Guid? AssignedToId { get; set; }
+        //public string AssignedToName { get; set; } = string.Empty; // Kullanici adi bilgisi
         public Guid TeamId { get; set; }
+        //public string TeamName { get; set; }  // Takim adi bilgisi
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

@@ -3,7 +3,7 @@
 namespace TaskBoard.Application.DTOs.Team
 {
     // Mevcut takimi guncellemek icin kullanilacak DTO
-    public class UpdateTeamDto
+    public class UpdateTeamRequestDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

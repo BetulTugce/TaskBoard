@@ -1,8 +1,7 @@
 ﻿namespace TaskBoard.Application.DTOs.Role
 {
-    public class UpdateRoleDto
+    public class CreateRoleRequestDto
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
