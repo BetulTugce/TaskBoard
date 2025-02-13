@@ -46,7 +46,7 @@ namespace TaskBoard.Persistence.Services
                 return new LoginUserResponseDto
                 {
                     Token = token,
-                    User = _mapper.Map<LoginUserDto>(user)
+                    //User = _mapper.Map<LoginUserDto>(user)
                 };
             }
 

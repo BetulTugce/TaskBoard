@@ -14,7 +14,7 @@ namespace TaskBoard.Application.Common.Mappings
             CreateMap<Domain.Entities.Task, CreateTaskRequestDto>().ReverseMap();
             CreateMap<Team, CreateTeamRequestDto>().ReverseMap();
             CreateMap<Team, TeamResponseDto>().ReverseMap();
-            CreateMap<ApplicationUser, LoginUserDto>().ReverseMap();
+            //CreateMap<ApplicationUser, LoginUserDto>().ReverseMap();
         }
     }
 }
