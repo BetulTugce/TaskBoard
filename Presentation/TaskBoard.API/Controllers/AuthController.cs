@@ -20,8 +20,13 @@ namespace TaskBoard.API.Controllers
         public async Task<IActionResult> Login(LoginUserRequestDto request)
         {
             // Yarim saatlik bir token olusturur..
-            var response = await _authService.LoginAsync(request, 1800);
-            return Ok(response);
+            var result = await _authService.LoginAsync(request, 1800);
+
+            if (!result.Succeeded)
+                return Unauthorized(result);
+            //return Unauthorized(new { message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("[action]")]
@@ -29,8 +34,8 @@ namespace TaskBoard.API.Controllers
         {
             var result = await _authService.RefreshTokenLoginAsync(request);
 
-            if (result == null)
-                return Unauthorized("Refresh token is invalid or expired");
+            if (!result.Succeeded)
+                return Unauthorized(result);
 
             return Ok(result);
         }

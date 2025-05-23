@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskBoard.Application.Abstractions.Services;
 using TaskBoard.Application.Abstractions.Token;
+using TaskBoard.Application.Common;
 using TaskBoard.Application.DTOs;
 using TaskBoard.Application.DTOs.User;
 using TaskBoard.Domain.Entities.Identity;
@@ -27,14 +28,12 @@ namespace TaskBoard.Persistence.Services
         }
 
         // Username ya da email ve parola ile giris yapar..
-        public async Task<LoginUserResponseDto> LoginAsync(LoginUserRequestDto loginDto, int accessTokenLifeTime)
+        public async Task<Result<LoginUserResponseDto>> LoginAsync(LoginUserRequestDto loginDto, int accessTokenLifeTime)
         {
-            ApplicationUser user = await _userManager.FindByNameAsync(loginDto.UsernameOrEmail);
-            if (user == null)
-                user = await _userManager.FindByEmailAsync(loginDto.UsernameOrEmail);
+            ApplicationUser user = await _userManager.FindByNameAsync(loginDto.UsernameOrEmail) ?? await _userManager.FindByEmailAsync(loginDto.UsernameOrEmail);
 
             if (user == null)
-                throw new Exception("Kullanıcı bulunamadı.");
+                return Result<LoginUserResponseDto>.Failure("Please check your credentials!");
 
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if (result.Succeeded) // Authentication basariliysa..
@@ -45,23 +44,22 @@ namespace TaskBoard.Persistence.Services
                 // Kullaniciya ait refresh token veritabaninda guncelleniyor.
                 await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 15);
 
-                return new LoginUserResponseDto
+                return Result<LoginUserResponseDto>.Success(new LoginUserResponseDto
                 {
-                    Token = token,
-                    //User = _mapper.Map<LoginUserDto>(user)
-                };
+                    Token = token
+                }, "Successfully logged in!");
             }
 
-            throw new Exception("Başarısız! Lütfen bilgilerinizi kontrol edin.");
+            return Result<LoginUserResponseDto>.Failure("Please check your password!");
         }
 
-        public async Task<LoginUserResponseDto> RefreshTokenLoginAsync(RefreshTokenLoginRequestDto request)
+        public async Task<Result<LoginUserResponseDto>> RefreshTokenLoginAsync(RefreshTokenLoginRequestDto request)
         {
             // RefreshTokena sahip kullanici araniyor..
             ApplicationUser user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
 
             if (user == null || user.RefreshTokenEndDate < DateTime.UtcNow)
-                return null; // Gecersiz veya suresi dolmus token
+                return Result<LoginUserResponseDto>.Failure("Refresh token is invalid or expired!"); // Gecersiz veya suresi dolmus token
 
             // Token olusturuluyor.
             Token token = _tokenHandler.GenerateAccessToken(15, user);
@@ -72,7 +70,7 @@ namespace TaskBoard.Persistence.Services
             {
                 Token = token,
             };
-            return response;
+            return Result<LoginUserResponseDto>.Success(response, "Successfully logged in!");
         }
     }
 }
