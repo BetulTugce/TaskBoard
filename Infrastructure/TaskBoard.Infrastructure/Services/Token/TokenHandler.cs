@@ -23,7 +23,7 @@ namespace TaskBoard.Infrastructure.Services.Token
             Application.DTOs.Token token = new();
 
             //Security Key'in simetrigi aliniyor..
-            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
+            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Authentication:User:SecurityKey"]));
 
             //Sifrelenmis kimligi olusturuyor..
             SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
@@ -31,9 +31,9 @@ namespace TaskBoard.Infrastructure.Services.Token
             // Kullanici bilgilerini iceren claim listesi olusturuluyor..
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("FirstName", user.FirstName),
                 new Claim("LastName", user.LastName),
             };
@@ -41,8 +41,9 @@ namespace TaskBoard.Infrastructure.Services.Token
             //Olusturulacak token ayarlari..
             token.Expiration = DateTime.UtcNow.AddSeconds(second);
             JwtSecurityToken securityToken = new(
-                audience: _configuration["Token:Audience"],
-                issuer: _configuration["Token:Issuer"],
+                //audience: _configuration["Token:Audience"],
+                audience: _configuration["Authentication:User:Audience"],
+                issuer: _configuration["Authentication:User:Issuer"],
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
                 signingCredentials: signingCredentials,

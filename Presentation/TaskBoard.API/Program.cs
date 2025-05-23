@@ -4,6 +4,11 @@ using TaskBoard.Domain.Entities.Identity;
 using TaskBoard.Persistence;
 using TaskBoard.Infrastructure;
 using TaskBoard.Persistence.Contexts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
+
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+    policy.WithOrigins("http://localhost:7168", "https://localhost:7168").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+));
 
 // Identity sistem ayarlari
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -27,6 +36,44 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 .AddDefaultTokenProviders();
 
 builder.Services.AddControllers();
+
+builder.Services.AddAuthentication()
+    // Adminler için JWT dogrulama
+    .AddJwtBearer(builder.Configuration["Authentication:Admin:Scheme"], options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidAudience = builder.Configuration["Authentication:Admin:Audience"],
+            ValidIssuer = builder.Configuration["Authentication:Admin:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                builder.Configuration["Authentication:Admin:SecurityKey"]
+            ))
+        };
+    })
+
+    // Normal kullanicilar için JWT dogrulama
+    .AddJwtBearer(builder.Configuration["Authentication:User:Scheme"], options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidAudience = builder.Configuration["Authentication:User:Audience"],
+            ValidIssuer = builder.Configuration["Authentication:User:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                builder.Configuration["Authentication:User:SecurityKey"]
+            ))
+        };
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,6 +89,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
