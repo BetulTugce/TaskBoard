@@ -1,4 +1,5 @@
 ﻿using TaskBoard.Application.DTOs.User;
+using TaskBoard.Domain.Entities.Identity;
 
 namespace TaskBoard.Application.Abstractions.Services
 {
@@ -7,5 +8,7 @@ namespace TaskBoard.Application.Abstractions.Services
         Task<CreateUserResponseDto> CreateAsync(CreateUserRequestDto userDto);
         Task<List<UserResponseDto>> GetAllUsersAsync(int page, int size);
         int TotalUsersCount { get; }
+
+        Task UpdateRefreshTokenAsync(string refreshToken, ApplicationUser user, DateTime accessTokenDate, int addOnAccessTokenDate);
     }
 }

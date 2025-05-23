@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TaskBoard.Application.Abstractions.Services;
 using TaskBoard.Application.Abstractions.Token;
 using TaskBoard.Application.DTOs;
@@ -41,7 +42,8 @@ namespace TaskBoard.Persistence.Services
                 // Token olusturuluyor..
                 Token token = _tokenHandler.GenerateAccessToken(accessTokenLifeTime, user);
 
-                //TODO: Refresh Token bilgisi users tablosuna kaydedilecek..
+                // Kullaniciya ait refresh token veritabaninda guncelleniyor.
+                await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 15);
 
                 return new LoginUserResponseDto
                 {
@@ -51,6 +53,26 @@ namespace TaskBoard.Persistence.Services
             }
 
             throw new Exception("Başarısız! Lütfen bilgilerinizi kontrol edin.");
+        }
+
+        public async Task<LoginUserResponseDto> RefreshTokenLoginAsync(RefreshTokenLoginRequestDto request)
+        {
+            // RefreshTokena sahip kullanici araniyor..
+            ApplicationUser user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
+
+            if (user == null || user.RefreshTokenEndDate < DateTime.UtcNow)
+                return null; // Gecersiz veya suresi dolmus token
+
+            // Token olusturuluyor.
+            Token token = _tokenHandler.GenerateAccessToken(15, user);
+
+            // User tablosundaki RefreshToken bilgisi olusturulan token bilgisinden alinarak guncelleniyor..
+            await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 300);
+            LoginUserResponseDto response = new()
+            {
+                Token = token,
+            };
+            return response;
         }
     }
 }

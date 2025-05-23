@@ -9,6 +9,10 @@ namespace TaskBoard.Domain.Entities.Identity
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         virtual public DateTime? UpdatedAt { get; set; }
 
+        // AccessToken suresi dolduktan sonra RefreshTokenEndDate baz alinarak bu token kontrol edilecek.. Suresi dolmadiysa yeni bir token olusturulacak..
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenEndDate { get; set; }
+
         // Kullaniciya atanmis gorevler
         public virtual ICollection<Task> Tasks { get; set; }
 

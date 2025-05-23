@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskBoard.Application.Abstractions.Services;
+using TaskBoard.Application.DTOs;
 using TaskBoard.Application.DTOs.User;
 
 namespace TaskBoard.API.Controllers
@@ -21,6 +22,17 @@ namespace TaskBoard.API.Controllers
             // Yarim saatlik bir token olusturur..
             var response = await _authService.LoginAsync(request, 1800);
             return Ok(response);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RefreshTokenLogin(RefreshTokenLoginRequestDto request)
+        {
+            var result = await _authService.RefreshTokenLoginAsync(request);
+
+            if (result == null)
+                return Unauthorized("Refresh token is invalid or expired");
+
+            return Ok(result);
         }
     }
 }

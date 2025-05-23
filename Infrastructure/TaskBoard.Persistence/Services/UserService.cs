@@ -66,6 +66,14 @@ namespace TaskBoard.Persistence.Services
             }).ToList();
         }
 
+        public async Task UpdateRefreshTokenAsync(string refreshToken, ApplicationUser user, DateTime accessTokenDate, int addOnAccessTokenDate)
+        {
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenEndDate = accessTokenDate.AddSeconds(addOnAccessTokenDate);
+
+            await _userManager.UpdateAsync(user);
+        }
+
         public int TotalUsersCount => _userManager.Users.Count();
     }
 }
