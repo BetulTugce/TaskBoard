@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TaskBoard.API.Extensions;
 using TaskBoard.Application.Abstractions.Services;
 using TaskBoard.Application.DTOs;
 using TaskBoard.Application.DTOs.User;
@@ -23,10 +24,10 @@ namespace TaskBoard.API.Controllers
             var result = await _authService.LoginAsync(request, 1800);
 
             if (!result.Succeeded)
-                return Unauthorized(result);
+                return this.MapErrorResult(result);
             //return Unauthorized(new { message = result.Message });
 
-            return Ok(result);
+            return Ok(result.Data);
         }
 
         [HttpPost("[action]")]
@@ -35,9 +36,9 @@ namespace TaskBoard.API.Controllers
             var result = await _authService.RefreshTokenLoginAsync(request);
 
             if (!result.Succeeded)
-                return Unauthorized(result);
+                return this.MapErrorResult(result);
 
-            return Ok(result);
+            return Ok(result.Data);
         }
     }
 }

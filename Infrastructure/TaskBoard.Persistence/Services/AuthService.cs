@@ -33,7 +33,7 @@ namespace TaskBoard.Persistence.Services
             ApplicationUser user = await _userManager.FindByNameAsync(loginDto.UsernameOrEmail) ?? await _userManager.FindByEmailAsync(loginDto.UsernameOrEmail);
 
             if (user == null)
-                return Result<LoginUserResponseDto>.Failure("Please check your credentials!");
+                return Result<LoginUserResponseDto>.Failure("Please check your credentials!", ErrorCode.Unauthorized);
 
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if (result.Succeeded) // Authentication basariliysa..
@@ -50,7 +50,7 @@ namespace TaskBoard.Persistence.Services
                 }, "Successfully logged in!");
             }
 
-            return Result<LoginUserResponseDto>.Failure("Please check your password!");
+            return Result<LoginUserResponseDto>.Failure("Please check your password!", ErrorCode.Unauthorized);
         }
 
         public async Task<Result<LoginUserResponseDto>> RefreshTokenLoginAsync(RefreshTokenLoginRequestDto request)
@@ -59,7 +59,7 @@ namespace TaskBoard.Persistence.Services
             ApplicationUser user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken);
 
             if (user == null || user.RefreshTokenEndDate < DateTime.UtcNow)
-                return Result<LoginUserResponseDto>.Failure("Refresh token is invalid or expired!"); // Gecersiz veya suresi dolmus token
+                return Result<LoginUserResponseDto>.Failure("Refresh token is invalid or expired!", ErrorCode.Unauthorized); // Gecersiz veya suresi dolmus token
 
             // Token olusturuluyor.
             Token token = _tokenHandler.GenerateAccessToken(15, user);

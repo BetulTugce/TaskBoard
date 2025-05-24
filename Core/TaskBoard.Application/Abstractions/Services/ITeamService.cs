@@ -1,11 +1,18 @@
-﻿using TaskBoard.Application.DTOs.Team;
+﻿using TaskBoard.Application.Common;
+using TaskBoard.Application.DTOs.Team;
 
 namespace TaskBoard.Application.Abstractions.Services
 {
     public interface ITeamService
     {
-        Task CreateAsync(CreateTeamRequestDto teamDto);
-        Task<List<TeamResponseDto>> GetTeamsByUserIdAsync(GetAllTeamsRequestDto requestDto);
-        Task<int> GetTotalCountByUserIdAsync(Guid userId);
+        Task<Result<bool>> CreateAsync(CreateTeamRequestDto teamDto);
+        Task<Result<List<TeamResponseDto>>> GetTeamsByUserIdAsync(GetAllTeamsRequestDto requestDto, Guid userId);
+        Task<Result<int>> GetTotalCountByUserIdAsync(Guid userId);
+
+        // Parametredeki teamIdye sahip takimi siler..
+        Task<Result<bool>> RemoveAsync(Guid teamId);
+
+        // TeamIdye gore siler (yonetici kontrolü yaparak)
+        Task<Result<bool>> RemoveIfManagerAsync(RemoveTeamRequestDto request);
     }
 }
