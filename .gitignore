@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Infrastructure/TaskBoard.Persistence/Migrations
 /Presentation/TaskBoard.API/appsettings.json
+/TaskBoard.Portal/appsettings.json

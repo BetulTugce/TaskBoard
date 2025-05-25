@@ -40,5 +40,14 @@ namespace TaskBoard.API.Controllers
 
             return Ok(result.Data);
         }
+
+        [HttpPost("google-login")]
+        public async Task<IActionResult > GoogleLogin(GoogleLoginRequestDto request)
+        {
+            var result = await _authService.GoogleLoginAsync(request.IdToken);
+            if (!result.Succeeded)
+                return this.MapErrorResult(result);
+            return Ok(result.Data);
+        }
     }
 }

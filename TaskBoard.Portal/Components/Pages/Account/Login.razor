@@ -1,0 +1,69 @@
+﻿@page "/login"
+@using System.Text.Json
+@using TaskBoard.Portal.DTOs.Auth
+@using TaskBoard.Portal.ViewModels.Auth
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject IConfiguration Configuration
+@inject IJSRuntime JS
+@rendermode InteractiveServer
+
+
+<h3>Giriş Yap</h3>
+
+<div id="googleLoginDiv"></div>
+
+@code {
+
+    private string _baseUrl = string.Empty;
+    protected override void OnInitialized()
+    {
+        // API base URL, appsettings.jsondan aliniyor..
+        _baseUrl = Configuration["ApiSettings:BaseUrl"] ?? throw new InvalidOperationException("API base URL is not configured.");
+    }
+
+    //TODO: Email-password ile giris eklenecek..
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                await JS.InvokeVoidAsync("initializeGoogleLogin", DotNetObjectReference.Create(this));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"JS çağrısında hata: {ex.Message}");
+            }
+        }
+    }
+
+    // JS tarafindan cagrilacak olan metod..
+    [JSInvokable]
+    public async Task OnGoogleLoginSuccess(object response)
+    {
+        var json = response.ToString();
+        var idToken = System.Text.Json.JsonDocument.Parse(json).RootElement.GetProperty("credential").GetString();
+
+        // IdToken: Google tarafindan kullaniciya ait olan JWT token'dir.
+        var googleLoginDto = new GoogleLoginRequestDto
+        {
+            IdToken = idToken
+        };
+
+        var result = await Http.PostAsJsonAsync($"{_baseUrl}Auth/google-login", googleLoginDto);
+        if (result.IsSuccessStatusCode)
+        {
+            // var jsonString = await result.Content.ReadAsStringAsync();
+            var responseBody = await result.Content.ReadFromJsonAsync<GoogleLoginResponseVM>();
+
+            // JWT apiyi consume edebilmek icin localStoragea kaydediliyor..
+            await JS.InvokeVoidAsync("localStorage.setItem", "access_token", responseBody.Token.AccessToken);
+            await JS.InvokeVoidAsync("localStorage.setItem", "expiration", responseBody.Token.Expiration);
+            await JS.InvokeVoidAsync("localStorage.setItem", "refresh_token", responseBody.Token.RefreshToken);
+
+            // Kullanici anasayfaya yonlendiriliyor..
+            Navigation.NavigateTo("/");
+        }
+    }
+}

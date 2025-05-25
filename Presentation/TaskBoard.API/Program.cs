@@ -17,9 +17,22 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
 
-builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
-    policy.WithOrigins("http://localhost:7168", "https://localhost:7168").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
-));
+//builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+//    policy.WithOrigins("http://localhost:7168", "https://localhost:7168").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+//));
+
+// CORS ayarlari.. APIyi baska originlerden gelen istekleri kabul edebilir hale getiriyor..
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowTaskBoardPortal", policy =>
+    {
+        policy.WithOrigins("https://localhost:7286", "http://localhost:5209")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 
 // Identity sistem ayarlari
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -89,6 +102,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowTaskBoardPortal");
 app.UseAuthentication();
 app.UseAuthorization();
 
