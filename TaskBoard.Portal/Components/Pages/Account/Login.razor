@@ -11,7 +11,11 @@
 
 <h3>Giriş Yap</h3>
 
+<!-- Google Login -->
 <div id="googleLoginDiv"></div>
+
+<!-- Facebook Login -->
+<div id="facebookLoginDiv"></div>
 
 @code {
 
@@ -30,6 +34,7 @@
             try
             {
                 await JS.InvokeVoidAsync("initializeGoogleLogin", DotNetObjectReference.Create(this));
+                await JS.InvokeVoidAsync("initializeFacebookLogin", DotNetObjectReference.Create(this));
             }
             catch (Exception ex)
             {
@@ -66,4 +71,29 @@
             Navigation.NavigateTo("/");
         }
     }
+
+    [JSInvokable]
+    public async Task OnFacebookLoginSuccess(string accessToken)
+    {
+        var facebookLoginDto = new FacebookLoginRequestDto
+        {
+            AuthToken = accessToken
+        };
+
+        // Facebooktan gelen accesstoken ile TaskBoardAPIye istek gonderiliyor..
+        var result = await Http.PostAsJsonAsync($"{_baseUrl}Auth/facebook-login", facebookLoginDto);
+        if (result.IsSuccessStatusCode)
+        {
+            var responseBody = await result.Content.ReadFromJsonAsync<FacebookLoginResponseVM>();
+
+            // JWT apiyi consume edebilmek icin localStoragea kaydediliyor..
+            await JS.InvokeVoidAsync("localStorage.setItem", "access_token", responseBody.Token.AccessToken);
+            await JS.InvokeVoidAsync("localStorage.setItem", "expiration", responseBody.Token.Expiration);
+            await JS.InvokeVoidAsync("localStorage.setItem", "refresh_token", responseBody.Token.RefreshToken);
+
+            // Kullanici anasayfaya yonlendiriliyor..
+            Navigation.NavigateTo("/");
+        }
+    }
+
 }

@@ -49,5 +49,13 @@ namespace TaskBoard.API.Controllers
                 return this.MapErrorResult(result);
             return Ok(result.Data);
         }
+        [HttpPost("facebook-login")]
+        public async Task<IActionResult> FacebookLogin(FacebookLoginRequestDto request)
+        {
+            var result = await _authService.FacebookLoginAsync(request.AuthToken, 1800);
+            if (!result.Succeeded)
+                return this.MapErrorResult(result);
+            return Ok(result.Data);
+        }
     }
 }

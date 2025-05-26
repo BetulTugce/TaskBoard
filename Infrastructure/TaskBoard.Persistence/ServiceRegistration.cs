@@ -15,6 +15,7 @@ namespace TaskBoard.Persistence
     {
         public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHttpClient();
             services.AddDbContext<TaskBoardDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("PostgreSQL")));
 
             services.AddScoped<ITaskReadRepository, TaskReadRepository>();
